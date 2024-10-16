@@ -2,7 +2,7 @@
 const { DataTypes} = require('sequelize');
 const sequelize = require('../database/connection.js')
 
-const Cancion = sequelize.define('Canciones',{
+const Cancion = sequelize.define('canciones',{
     id:{
         type:DataTypes.INTEGER,
         autoIncrement: true,
@@ -21,9 +21,23 @@ const Cancion = sequelize.define('Canciones',{
         allowNull:false
     }
 },{
-    tableName:canciones,
+    tableName:'canciones',
     timestamps:false
 });
 
 module.exports = Cancion;
 
+
+// <> Para sincronizar con mi BBDD
+
+// const test = () =>{
+//     sequelize.sync({ force: true })
+// .then(() => {
+//     console.log("Las tablas existentes se han sincronizado.");
+// })
+// .catch(err => {
+//     console.error("Error al sincronizar la tabla:", err);
+// });
+// }
+
+// test()
