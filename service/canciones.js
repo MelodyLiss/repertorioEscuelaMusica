@@ -29,25 +29,26 @@ const findAll = async () => {
 const findByAttributes = async (filtro) => {
     try {
         //<> Filtra las propiedades de filtro que no son undefined o null
-            //Object.fromEntries --> convierte el objeto en un arreglo de arreglos par [clave, valor]
-            //filter(([key, value]) => value  --> para filtrar en este caso por valor eliminando los con valor falso (null , vacios , undefined)
-            //Object.entries --> Convertir el array filtrado nuevamente en un objeto
+        //Object.fromEntries --> convierte el objeto en un arreglo de arreglos par [clave, valor]
+        //filter(([key, value]) => value  --> para filtrar en este caso por valor eliminando los con valor falso (null , vacios , undefined)
+        //Object.entries --> Convertir el array filtrado nuevamente en un objeto
 
         const condicion = Object.fromEntries(
-            Object.entries(filtro).filter(([key, value]) => value) 
+            Object.entries(filtro).filter(([key, value]) => value)
         );
 
-            //op para operadores y iLike es para que no discrimine entre mayúsculas y minusculas
-            // % comodin para que busque cualquiera que coincida con la palabra 
-        
+        //op para operadores y iLike es para que no discrimine entre mayúsculas y minusculas
+        // % comodin para que busque cualquiera que coincida con la palabra 
+
         if (condicion.titulo) {
-            condicion.titulo = { [Op.iLike]: `%${condicion.titulo}%` }; 
+            condicion.titulo = { [Op.iLike]: `%${condicion.titulo}%` };
         }
         if (condicion.artista) {
             condicion.artista = { [Op.iLike]: `%${condicion.artista}%` };
         }
         if (condicion.tono) {
-            condicion.tono = { [Op.iLike]: `%${condicion.tono}%` };         }
+            condicion.tono = { [Op.iLike]: `%${condicion.tono}%` };
+        }
 
         const canciones = await Canciones.findAll({ where: condicion });
         if (canciones.length === 0) {
@@ -58,7 +59,7 @@ const findByAttributes = async (filtro) => {
             };
         }
 
-        
+
         return {
             msg: 'Canciones encontradas',
             status: 200,
@@ -75,7 +76,37 @@ const findByAttributes = async (filtro) => {
     }
 };
 
+const update = async (id, titulo, artista, tono) => {
+    try {
+        await Canciones.update({
+            id,
+            titulo,
+            artista,
+            tono
+        },{
+            where:{
+                id
+            }
+        });
+        const canciones = await Canciones.findAll();
+        return{
+            msg:`La canción asociada al id ${id} fue actualizada correctamente`,
+            status: 200,
+            datos: canciones.map(cancion => cancion.dataValues)
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        return {
+            msg: 'Error en el servidor',
+            status: 500,
+            datos: []
+        }
+    }
+};
+
 module.exports = {
     findAll,
-    findByAttributes
+    findByAttributes,
+    update
 }

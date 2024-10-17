@@ -1,4 +1,4 @@
-const {findAll, findByAttributes} = require('../service/canciones.js');
+const {findAll, findByAttributes, update} = require('../service/canciones.js');
 
 const findAllController = async (req,res) => {
     const respuesta = await findAll();
@@ -25,6 +25,10 @@ const findByAttributesController = async (req, res) => {
         canciones: respuesta.datos
     });
 };
+
+const updateController = async (req,res) => {
+    
+}
 
 
 module.exports ={

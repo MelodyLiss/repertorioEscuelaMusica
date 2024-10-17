@@ -48,6 +48,8 @@
                     <th scope="col">Titulo</th>
                     <th scope="col">Artista</th>
                     <th scope="col">Tono</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -55,9 +57,20 @@
                 {{#each canciones}}
                 <tr>
                     <th scope="row">{{this.id}}</th>
-                    <td>{{this.titulo}}</td>
-                    <td>{{this.artista}}</td>
-                    <td>{{this.tono}}</td>
+                    <td>
+                        <span class="valorFijo">{{this.titulo}}</span>
+                        <input class="edit-input d-none" value="{{this.titulo}}">
+                    </td>
+                    <td>
+                        <span class="valorFijo">{{this.artista}}</span>
+                        <input class="edit-input d-none" value="{{this.artista}}">
+                    </td>
+                    <td>
+                        <span class="valorFijo">{{this.tono}}</span>
+                        <input class="edit-input d-none" value="{{this.tono}}">
+                    </td>
+                    <td><button type="button" class="btn btn-success">Actualizar</button></td>
+                    {{!-- <td><a href="/deportes/delete?id={{this.id}}" class="btn btn-danger">Eliminar</a></td> --}}
                 </tr>
                 {{/each}}
             </tbody>

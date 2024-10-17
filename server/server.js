@@ -12,7 +12,6 @@ class Server {
 
     middlewares(){
         this._app.set('view engine','hbs');
-        this._app.use(express.json());
         hbs.registerPartials(path.join(__dirname, '../views/partials'));
         this._app.use(express.urlencoded({extended:true}));
         this._app.use(express.static('public'));
