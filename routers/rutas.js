@@ -1,10 +1,10 @@
 
 const {Router} = require('express');
 const router = Router();
-const {findAllController} = require('../controllers/canciones.js')
+const {findAllController, findByAttributesController} = require('../controllers/canciones.js')
 
 router.get('/', findAllController);
-
+router.get('/buscar', findByAttributesController )
 
 
 // ruta defaul para paginas no encontradas

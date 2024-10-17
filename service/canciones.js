@@ -1,4 +1,5 @@
 const Canciones = require('../models/canciones.js');
+const { Op } = require('sequelize');
 
 const findAll = async () => {
     try {
@@ -25,28 +26,30 @@ const findAll = async () => {
     }
 }
 
-const findByAttributes = async (filters) => {
+const findByAttributes = async (filtro) => {
     try {
+        //<> Filtra las propiedades de filtro que no son undefined o null
+            //Object.fromEntries --> convierte el objeto en un arreglo de arreglos par [clave, valor]
+            //filter(([key, value]) => value  --> para filtrar en este caso por valor eliminando los con valor falso (null , vacios , undefined)
+            //Object.entries --> Convertir el array filtrado nuevamente en un objeto
+
+        const condicion = Object.fromEntries(
+            Object.entries(filtro).filter(([key, value]) => value) 
+        );
+
+            //op para operadores y iLike es para que no discrimine entre mayúsculas y minusculas
+            // % comodin para que busque cualquiera que coincida con la palabra 
         
-        const conditions = {};
+        if (condicion.titulo) {
+            condicion.titulo = { [Op.iLike]: `%${condicion.titulo}%` }; 
+        }
+        if (condicion.artista) {
+            condicion.artista = { [Op.iLike]: `%${condicion.artista}%` };
+        }
+        if (condicion.tono) {
+            condicion.tono = { [Op.iLike]: `%${condicion.tono}%` };         }
 
-        if (filters.id) {
-            conditions.id = filters.id;
-        }
-        if (filters.titulo) {
-            conditions.titulo = filters.titulo;
-        }
-        if (filters.artista) {
-            conditions.artista = filters.artista;
-        }
-        if (filters.tono) {
-            conditions.tono = filters.tono;
-        }
-
-        const canciones = await Canciones.findAll({
-            where: conditions
-        });
-
+        const canciones = await Canciones.findAll({ where: condicion });
         if (canciones.length === 0) {
             return {
                 msg: 'No se encontraron canciones con los criterios proporcionados',
@@ -55,6 +58,7 @@ const findByAttributes = async (filters) => {
             };
         }
 
+        
         return {
             msg: 'Canciones encontradas',
             status: 200,
